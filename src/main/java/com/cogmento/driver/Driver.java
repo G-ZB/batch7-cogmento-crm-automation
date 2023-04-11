@@ -30,45 +30,104 @@ public class Driver {
 
     public static WebDriver getDriver() {
 
-
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
-
 
         String browser = ConfigReader.getProperty("browser");
         String implicitWait = ConfigReader.getProperty("implicitWait");
         String loadPage = ConfigReader.getProperty("pageLoadTime");
 
 
-        if (browser.equalsIgnoreCase(("chrome"))) {
-            WebDriverManager.chromedriver().setup();
-            WebDriver driver = new ChromeDriver(options);
-            Map<String, Object> prefs = new HashMap<>();
-            prefs.put("autofill.profile_enabled", false);
-            prefs.put("autofill.password_manage_enabled", false);
-            prefs.put("autofill.default_content_setting_values_notifications", 2);
-            options.setExperimentalOption("prefs", prefs);
+        switch(browser){
 
-        } else if (browser.equalsIgnoreCase(("firefox"))) {
-            WebDriverManager.firefoxdriver().setup();
-            driver = new FirefoxDriver();
+            case "chrome":
+                WebDriverManager.chromedriver().setup();
+                WebDriver driver = new ChromeDriver(options);
+                driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Integer.parseInt(implicitWait)));
+                driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(Integer.parseInt(loadPage)));
+                driver.manage().window().maximize();
+                Map<String, Object> prefs = new HashMap<>();
+                prefs.put("autofill.profile_enabled", false);
+                prefs.put("autofill.password_manage_enabled", false);
+                prefs.put("autofill.default_content_setting_values_notifications", 2);
+                options.setExperimentalOption("prefs", prefs);
+                return driver;
 
-        } else if (browser.equalsIgnoreCase(("edge"))) {
-            WebDriverManager.edgedriver().setup();
-            driver = new EdgeDriver();
-        } else {
-            throw new RuntimeException("No driver found");
+            case "edge":
+                WebDriverManager.edgedriver().setup();
+                driver = new EdgeDriver();
+                driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+                driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+                driver.manage().window().maximize();
+                return driver;
+
+            case "firefox":
+
+                WebDriverManager.firefoxdriver().setup();
+                driver = new FirefoxDriver();
+                driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+                driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+                driver.manage().window().maximize();
+                return driver;
+
+            default:
+                throw new RuntimeException("No driver found");
         }
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Integer.parseInt(implicitWait)));
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(Integer.parseInt(loadPage)));
-        return driver;
+
     }
-        public static void quitDriver() {
 
-            if (driver != null) {
-                driver.quit();
+    public static void quitDriver() {
 
-            }
+        if (driver != null) {
+            driver.quit();
+
         }
     }
+    }
+
+
+//------Not Working with If need to find out why----------------
+//
+//        ChromeOptions options = new ChromeOptions();
+//        options.addArguments("--remote-allow-origins=*");
+//
+//
+//        String browser = ConfigReader.getProperty("browser");
+//        String implicitWait = ConfigReader.getProperty("implicitWait");
+//        String loadPage = ConfigReader.getProperty("pageLoadTime");
+//
+//
+//
+//        if (browser.equalsIgnoreCase(("chrome"))) {
+//            WebDriverManager.chromedriver().setup();
+//            WebDriver driver = new ChromeDriver(options);
+//             Map<String, Object> prefs = new HashMap<>();
+//            prefs.put("autofill.profile_enabled", false);
+//            prefs.put("autofill.password_manage_enabled", false);
+//            prefs.put("autofill.default_content_setting_values_notifications", 2);
+//            options.setExperimentalOption("prefs", prefs);
+//
+//        } else if (browser.equalsIgnoreCase(("firefox"))) {
+//            WebDriverManager.firefoxdriver().setup();
+//            driver = new FirefoxDriver();
+//
+//        } else if (browser.equalsIgnoreCase(("edge"))) {
+//            WebDriverManager.edgedriver().setup();
+//            driver = new EdgeDriver();
+//        } else {
+//            throw new RuntimeException("No driver found");
+//        }
+//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Integer.parseInt(implicitWait)));
+//        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(Integer.parseInt(loadPage)));
+//        driver.manage().window().maximize();
+//        return driver;
+//    }
+//        public static void quitDriver() {
+//
+//            if (driver != null) {
+//                driver.quit();
+//
+//            }
+//        }
+//    }
 
