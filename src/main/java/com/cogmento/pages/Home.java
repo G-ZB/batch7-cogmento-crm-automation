@@ -1,4 +1,4 @@
 package com.cogmento.pages;
 
-public class HomePage {
+public class Home {
 }

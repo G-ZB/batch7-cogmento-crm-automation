@@ -7,7 +7,8 @@ public class ConfigReader {
 
     //This class we will have the following proprieties as private static
     private static Properties properties;
-    private static final String CONFIG_FILE_PATH = "src/main/resources/Config.Proprieties";
+    private static final String CONFIG_FILE_PATH = "src/main/resources/config.Properties";
+
 
     //Empty private constructor (since the proprieties are static we can not have them in the constructor)
     private ConfigReader() {
